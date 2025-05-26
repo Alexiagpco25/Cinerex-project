@@ -6,8 +6,8 @@ export class Admin {
   id: string;
 
   @Column({ unique: true })
-  username: string;
+  email: string;
 
   @Column()
-  password: string; 
+  password: string;
 }

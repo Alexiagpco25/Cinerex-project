@@ -4,8 +4,8 @@ import { SalasModule } from './salas/salas.module';
 import { FuncionesModule } from './funciones/funciones.module';
 import { BoletosModule } from './boletos/boletos.module';
 import { PeliculasModule } from './peliculas/peliculas.module';
-import { AdministradoresModule } from './administradores/administradores.module';
-import { AdminsModule } from './admins/admins.module';
+import { AdminModule } from './admins/admins.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -23,8 +23,8 @@ import { AdminsModule } from './admins/admins.module';
     FuncionesModule,
     BoletosModule,
     PeliculasModule,
-    AdministradoresModule,
-    AdminsModule,
+    AdminModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

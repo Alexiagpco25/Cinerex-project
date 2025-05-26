@@ -10,4 +10,10 @@ export class CreatePeliculaDto {
   @IsInt()
   @Min(1)
   duracion: number;
+
+  @IsString()
+  imagenUrl: string; 
+
+  @IsString()
+  clasificacion: string;
 }

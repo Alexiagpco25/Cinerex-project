@@ -1,34 +1,32 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { AdminsService } from './admins.service';
-import { CreateAdminDto } from './dto/create-admin.dto';
+import { Controller, Get, Patch, Param, Delete, NotFoundException, Body } from '@nestjs/common';
+import { AdminService } from './admins.service';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 
 @Controller('admins')
-export class AdminsController {
-  constructor(private readonly adminsService: AdminsService) {}
-
-  @Post()
-  create(@Body() createAdminDto: CreateAdminDto) {
-    return this.adminsService.create(createAdminDto);
-  }
+export class AdminController {
+  constructor(private readonly adminService: AdminService) {}
 
   @Get()
   findAll() {
-    return this.adminsService.findAll();
+    return this.adminService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.adminsService.findOne(+id);
+  @Get(':email')
+  async findOne(@Param('email') email: string) {
+    const admin = await this.adminService.findByEmail(email);
+    if (!admin) {
+      throw new NotFoundException('Admin no encontrado');
+    }
+    return admin;
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAdminDto: UpdateAdminDto) {
-    return this.adminsService.update(+id, updateAdminDto);
+  @Patch(':email')
+  update(@Param('email') email: string, @Body() updateAdminDto: UpdateAdminDto) {
+    return this.adminService.updateAdmin(email, updateAdminDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.adminsService.remove(+id);
+  @Delete(':email')
+  remove(@Param('email') email: string) {
+    return this.adminService.remove(email);
   }
 }

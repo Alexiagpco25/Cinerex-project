@@ -1,9 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { Funcion } from '../../funciones/entities/funcion.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Funcion } from "../../funciones/entities/funcion.entity";
 
 @Entity()
 export class Pelicula {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column()
@@ -13,8 +13,14 @@ export class Pelicula {
   descripcion: string;
 
   @Column()
-  duracion: number; 
+  duracion: number;
 
-  @OneToMany(() => Funcion, funcion => funcion.pelicula)
+  @Column()
+  imagenUrl: string;
+
+  @Column()
+  clasificacion: string;
+
+  @OneToMany(() => Funcion, (funcion) => funcion.pelicula)
   funciones: Funcion[];
 }

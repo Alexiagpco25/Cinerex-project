@@ -1,7 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Admin } from './entities/admin.entity';
+import { CreateAdminDto } from './dto/create-admin.dto';
+import { UpdateAdminDto } from './dto/update-admin.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AdminService {
@@ -10,38 +13,44 @@ export class AdminService {
     private adminRepository: Repository<Admin>,
   ) {}
 
-  create(createAdminDto: { username: string; password: string }) {
-    const admin = this.adminRepository.create(createAdminDto);
-    return this.adminRepository.save(admin);
+  async create(createAdminDto: CreateAdminDto) {
+    const existe = await this.adminRepository.findOne({ where: { email: createAdminDto.email } });
+    if (existe) throw new BadRequestException('El admin ya existe');
+
+    createAdminDto.password = await bcrypt.hash(createAdminDto.password, 10);
+
+    return this.adminRepository.save(createAdminDto);
   }
 
   findAll() {
     return this.adminRepository.find();
   }
 
-  async findOne(id: string) {
-    const admin = await this.adminRepository.findOne({ where: { id } });
+  async findByEmail(email: string) {
+    const admin = await this.adminRepository.findOne({ where: { email } });
     if (!admin) throw new NotFoundException('Admin no encontrado');
     return admin;
   }
 
-  async update(id: string, updateAdminDto: Partial<Admin>) {
+  async updateAdmin(email: string, updateAdminDto: UpdateAdminDto) {
     const adminToUpdate = await this.adminRepository.preload({
-      id,
+      email,
       ...updateAdminDto,
     });
-    if (!adminToUpdate) {
-      throw new NotFoundException(`Admin con id ${id} no encontrado`);
+
+    if (!adminToUpdate) throw new NotFoundException('Admin no encontrado');
+
+    if (updateAdminDto.password) {
+      adminToUpdate.password = await bcrypt.hash(updateAdminDto.password, 10);
     }
+
     return this.adminRepository.save(adminToUpdate);
   }
 
-  remove(id: string) {
-    return this.adminRepository.delete({ id });
-  }
-
-  findByUsername(username: string) {
-    return this.adminRepository.findOne({ where: { username } });
+  async remove(email: string) {
+    const admin = await this.adminRepository.findOne({ where: { email } });
+    if (!admin) throw new NotFoundException('Admin no encontrado');
+    await this.adminRepository.remove(admin);
+    return { message: 'Admin eliminado correctamente' };
   }
 }
-
