@@ -30,7 +30,8 @@ export class FuncionesService {
     const funcion = this.funcionRepo.create({
       pelicula,
       sala,
-      fechaHora: new Date(dto.fechaHora),
+      fecha: dto.fecha,  
+      hora: dto.hora,
     });
 
     return this.funcionRepo.save(funcion);
@@ -64,16 +65,20 @@ export class FuncionesService {
       funcion.sala = sala;
     }
 
-    if (dto.fechaHora) {
-      funcion.fechaHora = new Date(dto.fechaHora);
+    if (dto.fecha) {
+      funcion.fecha = dto.fecha;
+    }
+
+    if (dto.hora) {
+      funcion.hora = dto.hora;
     }
 
     return this.funcionRepo.save(funcion);
   }
 
-async remove(id: string) {
-  const result = await this.funcionRepo.delete(id);
-  if (result.affected === 0) throw new NotFoundException('Función no encontrada');
-  return { message: 'Función eliminada con exito', id };
-}
+  async remove(id: string) {
+    const result = await this.funcionRepo.delete(id);
+    if (result.affected === 0) throw new NotFoundException('Función no encontrada');
+    return { message: 'Función eliminada con éxito', id };
+  }
 }

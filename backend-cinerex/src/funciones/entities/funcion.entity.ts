@@ -14,8 +14,11 @@ export class Funcion {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
-  fechaHora: Date;
+  @Column({ type: 'date' })
+  fecha: string;
+
+  @Column({ type: 'time' })
+  hora: string;
 
   @ManyToOne(() => Sala, sala => sala.funciones)
   sala: Sala;
