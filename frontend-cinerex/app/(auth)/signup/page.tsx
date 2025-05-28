@@ -108,7 +108,7 @@ export default function SignupPage() {
           value={repeatPassword}
           onChange={(e) => setRepeatPassword(e.target.value)}
           className="w-full bg-gray-700 border border-gray-600 rounded-md placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-          placeholder="********"
+          placeholder="****"
         />
       </div>
 
