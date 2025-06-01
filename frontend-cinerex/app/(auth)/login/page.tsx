@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { Input, Button } from "@heroui/react";
 import Link from "next/link";
@@ -6,21 +6,21 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     try {
-      const res = await fetch('http://localhost:3000/auth/login', {
-        method: 'POST',
-        credentials: 'include', 
+      const res = await fetch("http://localhost:3000/auth/login", {
+        method: "POST",
+        credentials: "include",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email,
@@ -30,10 +30,10 @@ export default function LoginPage() {
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.message || 'Error al iniciar sesión');
+        throw new Error(data.message || "Error al iniciar sesión");
       }
 
-      router.push('/admin');
+      router.push("/admin");
     } catch (err: any) {
       setError(err.message);
     }
@@ -45,11 +45,17 @@ export default function LoginPage() {
       onSubmit={handleSubmit}
     >
       <h2 className="text-3xl font-semibold text-white mb-6 text-center">
-        Bienvenido a <span className="text-blue-400"><b>Cinerex</b></span>
+        Bienvenido a{" "}
+        <span className="text-blue-400">
+          <b>Cinerex</b>
+        </span>
       </h2>
 
       <div className="mb-5">
-        <label htmlFor="userEmail" className="block mb-1 text-gray-300 font-semibold">
+        <label
+          htmlFor="userEmail"
+          className="block mb-1 text-gray-300 font-semibold"
+        >
           Correo electrónico
         </label>
         <Input
@@ -65,7 +71,10 @@ export default function LoginPage() {
       </div>
 
       <div className="mb-6">
-        <label htmlFor="userPassword" className="block mb-1 text-gray-300 font-semibold">
+        <label
+          htmlFor="userPassword"
+          className="block mb-1 text-gray-300 font-semibold"
+        >
           Contraseña
         </label>
         <Input
@@ -95,7 +104,10 @@ export default function LoginPage() {
 
       <p className="mt-5 text-center text-gray-400 text-sm">
         ¿No tienes cuenta?{" "}
-        <Link href="/signup" className="text-gray-400 hover:text-blue-400 underline">
+        <Link
+          href="/signup"
+          className="text-gray-400 hover:text-blue-400 underline"
+        >
           Regístrate aquí
         </Link>
       </p>

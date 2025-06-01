@@ -21,10 +21,15 @@ export class PeliculasService {
   }
 
   async findOne(id: string) {
-    const pelicula = await this.peliculaRepo.findOne({ where: { id } });
-    if (!pelicula) throw new NotFoundException('Película no encontrada');
-    return pelicula;
-  }
+  const pelicula = await this.peliculaRepo.findOne({
+    where: { id },
+    relations: ['funciones', 'funciones.sala'], 
+  });
+
+  if (!pelicula) throw new NotFoundException('Película no encontrada');
+  return pelicula;
+}
+
 
   async update(id: string, dto: UpdatePeliculaDto) {
     const pelicula = await this.peliculaRepo.preload({

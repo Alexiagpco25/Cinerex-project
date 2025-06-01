@@ -6,27 +6,33 @@ import {
   Param,
   Res,
   BadRequestException,
-} from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { LoginAdminDto } from './dto/login-admin.dto';
-import { UpdateAdminDto } from './dto/update-admin.dto';
-import { Response } from 'express';
+} from "@nestjs/common";
+import { AuthService } from "./auth.service";
+import { LoginAdminDto } from "./dto/login-admin.dto";
+import { UpdateAdminDto } from "./dto/update-admin.dto";
+import { Response } from "express";
+import { AuthGuard } from "./guards/auth.guard";
+import { RolesGuard } from "./guards/roles.guard";
+import { Roles } from "./decorators/roles.decorator";
+import { UseGuards } from "@nestjs/common";
 
-const TOKEN_NAME = 'auth_token';
+const TOKEN_NAME = "auth_token";
 
-@Controller('auth')
+@Controller("auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('register')
+  @Post("register")
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles("admin")
   async register(@Body() loginDto: LoginAdminDto) {
     return this.authService.register(loginDto);
   }
 
-  @Post('login')
+  @Post("login")
   async login(
     @Body() loginDto: LoginAdminDto,
-    @Res({ passthrough: true }) response: Response,
+    @Res({ passthrough: true }) response: Response
   ) {
     const token = await this.authService.login(loginDto);
     const expireDate = new Date();
@@ -35,18 +41,18 @@ export class AuthController {
     response.cookie(TOKEN_NAME, token.access_token, {
       httpOnly: true,
       secure: true,
-      sameSite: 'none',
+      sameSite: "none",
       expires: expireDate,
-      maxAge: 1000 * 60 * 60 * 24 * 7, 
+      maxAge: 1000 * 60 * 60 * 24 * 7,
     });
 
     return { token: token.access_token, admin: token.admin };
   }
 
-  @Patch(':email')
+  @Patch(":email")
   async updateAdmin(
-    @Param('email') email: string,
-    @Body() updateDto: UpdateAdminDto,
+    @Param("email") email: string,
+    @Body() updateDto: UpdateAdminDto
   ) {
     return this.authService.updateAdmin(email, updateDto);
   }

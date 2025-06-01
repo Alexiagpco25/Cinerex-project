@@ -3,7 +3,7 @@
 import { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
 import { Funcion, Pelicula, Sala } from "../../entities";
-import FuncionForm from "./FuncionForm"; 
+import FuncionForm from "./_components/FuncionForm"; 
 import { Card, CardHeader, CardBody, Divider, Button } from "@heroui/react";
 import { LuTrash2 } from "react-icons/lu";
 

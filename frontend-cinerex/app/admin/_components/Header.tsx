@@ -10,7 +10,7 @@ export default function Header() {
           src="/Logo.svg"
           width={40}
           height={40}
-          alt="Ocso Logo"
+          alt="Cinerex Logo"
           draggable={false}
         />
         <span className="text-xl font-semibold text-white"><b>Cinerex</b></span>

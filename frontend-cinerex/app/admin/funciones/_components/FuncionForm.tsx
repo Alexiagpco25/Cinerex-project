@@ -1,7 +1,7 @@
 "use client";
 
 import { ChangeEvent, FormEvent } from "react";
-import { Funcion, Pelicula, Sala } from "../../entities";
+import { Funcion, Pelicula, Sala } from "../../../entities";
 import { Input, Button } from "@heroui/react";
 
 interface FuncionFormProps {

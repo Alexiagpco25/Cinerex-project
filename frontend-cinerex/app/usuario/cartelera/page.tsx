@@ -6,7 +6,7 @@ async function getPeliculas() {
     throw new Error('Error al obtener películas');
   }
   const data = await res.json();
-  return data; 
+  return data;
 }
 
 export default async function CarteleraPage() {
@@ -17,11 +17,20 @@ export default async function CarteleraPage() {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-      {peliculas.map((pelicula) => (
-        <PeliculaCard key={pelicula.id} pelicula={pelicula} />
-      ))}
+    <div className="px-4 py-8">
+      <div className="flex justify-center mb-10">
+        <h1 className="text-3xl font-bold px-6 py-2 bg-indigo-200 text-indigo-900 rounded-lg transition-colors duration-300 hover:bg-indigo-100 hover:text-indigo-700">
+          Cartelera
+        </h1>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {peliculas.map((pelicula) => (
+          <PeliculaCard key={pelicula.id} pelicula={pelicula} />
+        ))}
+      </div>
     </div>
   );
 }
+
 

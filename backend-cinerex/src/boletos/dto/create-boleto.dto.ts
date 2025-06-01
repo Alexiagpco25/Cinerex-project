@@ -1,4 +1,4 @@
-import { IsUUID, IsInt, Min, IsString, IsNotEmpty } from "class-validator";
+import { IsUUID, IsInt, Min } from "class-validator";
 
 export class CreateBoletoDto {
   @IsUUID()
@@ -6,9 +6,5 @@ export class CreateBoletoDto {
 
   @IsInt()
   @Min(1)
-  asiento: number;
-
-  @IsString()
-  @IsNotEmpty()
-  cliente: string;
+  cantidad: number;
 }

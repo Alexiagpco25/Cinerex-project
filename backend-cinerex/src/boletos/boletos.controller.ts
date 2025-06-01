@@ -32,3 +32,4 @@ export class BoletosController {
     return this.boletosService.remove(id);
   }
 }
+

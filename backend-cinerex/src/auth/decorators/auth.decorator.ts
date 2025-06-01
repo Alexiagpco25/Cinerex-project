@@ -1,4 +1,11 @@
-import { SetMetadata } from '@nestjs/common';
+import { applyDecorators, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '../guards/auth.guard';
+import { RolesGuard } from '../guards/roles.guard';
+import { Roles } from './roles.decorator';
 
-export const IS_PUBLIC_KEY = 'isPublic';
-export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);
+export const Auth = (...roles: string[]) => {
+  return applyDecorators(
+    Roles(...(roles.length ? roles : ['admin'])),
+    UseGuards(AuthGuard, RolesGuard),
+  );
+};

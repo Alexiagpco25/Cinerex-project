@@ -12,12 +12,6 @@ export class Boleto {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
-  cliente: string;
-
-  @Column()
-  asiento: number;
-
   @CreateDateColumn()
   fechaCompra: Date;
 

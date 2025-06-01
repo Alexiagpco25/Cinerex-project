@@ -26,7 +26,6 @@ export interface Sala {
 }
 
 
-
 export interface Admin {
   id: number;
   email: string;

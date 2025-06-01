@@ -30,24 +30,39 @@ export class FuncionesService {
     const funcion = this.funcionRepo.create({
       pelicula,
       sala,
-      fecha: dto.fecha,  
+      fecha: dto.fecha,
       hora: dto.hora,
     });
 
     return this.funcionRepo.save(funcion);
   }
 
-  findAll() {
-    return this.funcionRepo.find({ relations: ['sala', 'pelicula'] });
-  }
+  async findAll() {
+  const funciones = await this.funcionRepo.find({
+    relations: ['sala', 'pelicula', 'boletos'],
+  });
+
+  return funciones.map(f => ({
+    ...f,
+    peliculaId: f.pelicula?.id, 
+    boletosVendidos: f.boletos?.length ?? 0,
+    boletos: undefined,
+  }));
+}
+
 
   async findOne(id: string) {
     const funcion = await this.funcionRepo.findOne({
       where: { id },
-      relations: ['sala', 'pelicula'],
+      relations: ['sala', 'pelicula', 'boletos'],
     });
     if (!funcion) throw new NotFoundException('Función no encontrada');
-    return funcion;
+
+    return {
+      ...funcion,
+      boletosVendidos: funcion.boletos?.length ?? 0,
+      boletos: undefined, 
+    };
   }
 
   async update(id: string, dto: UpdateFuncionDto) {

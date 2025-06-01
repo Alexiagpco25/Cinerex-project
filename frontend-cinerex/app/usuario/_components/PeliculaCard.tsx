@@ -1,12 +1,20 @@
 "use client";
+
 import { useState } from "react";
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
 import { Card, CardHeader, CardBody, Button } from "@heroui/react";
 import ModalDescripcion from "./ModalDescripcion";
+import {
+  FiInfo,
+  FiShoppingCart,
+  FiClock,
+  FiFilm,
+  FiStar,
+} from "react-icons/fi";
 
 export default function PeliculaCard({ pelicula }: { pelicula: any }) {
   const [open, setOpen] = useState(false);
-  const router = useRouter(); 
+  const router = useRouter();
 
   const getClasificacionBadge = (clasificacion: string) => {
     switch (clasificacion?.toUpperCase()) {
@@ -23,38 +31,49 @@ export default function PeliculaCard({ pelicula }: { pelicula: any }) {
 
   return (
     <>
-      <Card className="w-full max-w-xs shadow-md mx-auto">
+      <Card className="w-full max-w-xs shadow-lg rounded-xl overflow-hidden mx-auto transition hover:scale-[1.02] duration-200">
         <CardHeader className="p-0">
           <img
-            src={pelicula.imagenUrl}
+            src={`http://localhost:3000/${pelicula.imagenUrl}`}
             alt={pelicula.titulo}
-            className="rounded-t-xl h-64 w-full object-cover"
+            className="h-64 w-full object-cover"
           />
         </CardHeader>
-        <CardBody className="flex flex-col items-center text-center px-6">
-          <h2 className="text-lg font-bold mb-1">{pelicula.titulo}</h2>
-          <p className="text-sm text-muted-foreground mb-3">
-            🎞 {pelicula.duracion} min ·{" "}
-            <span
-              className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${getClasificacionBadge(
-                pelicula.clasificacion
-              )}`}
-            >
-              Clasificación: {pelicula.clasificacion}
+
+        <CardBody className="flex flex-col items-center text-center px-6 pb-6">
+          <h2 className="text-xl font-semibold mb-2">{pelicula.titulo}</h2>
+
+          <div className="text-sm text-muted-foreground flex flex-col items-center gap-1 mb-3">
+            <span className="flex items-center gap-1">
+              <FiClock /> {pelicula.duracion} min
             </span>
-          </p>
+            <span className="flex items-center gap-1">
+              <FiStar />
+              <span
+                className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getClasificacionBadge(
+                  pelicula.clasificacion
+                )}`}
+              >
+                Clasificación: {pelicula.clasificacion}
+              </span>
+            </span>
+          </div>
 
           <div className="mt-4 flex gap-4 justify-center w-full">
-            <Button variant="bordered" onClick={() => setOpen(true)} className="flex-1">
-              Ver más
+            <Button
+              variant="bordered"
+              onClick={() => setOpen(true)}
+              className="flex-1 flex items-center justify-center gap-2"
+            >
+              <FiInfo /> Ver más
             </Button>
 
             <Button
               variant="solid"
               onClick={() => router.push(`/usuario/pelicula/${pelicula.id}`)}
-              className="flex-1"
+              className="flex-1 flex items-center justify-center gap-2"
             >
-              Comprar
+              <FiShoppingCart /> Comprar
             </Button>
           </div>
         </CardBody>

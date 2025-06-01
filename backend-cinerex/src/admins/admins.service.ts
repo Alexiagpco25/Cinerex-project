@@ -28,7 +28,7 @@ export class AdminService {
 
   async findByEmail(email: string) {
     const admin = await this.adminRepository.findOne({ where: { email } });
-    if (!admin) throw new NotFoundException('Admin no encontrado');
+    if (!admin) throw new NotFoundException('Administrador no encontrado');
     return admin;
   }
 
@@ -38,7 +38,7 @@ export class AdminService {
       ...updateAdminDto,
     });
 
-    if (!adminToUpdate) throw new NotFoundException('Admin no encontrado');
+    if (!adminToUpdate) throw new NotFoundException('Administrador no encontrado');
 
     if (updateAdminDto.password) {
       adminToUpdate.password = await bcrypt.hash(updateAdminDto.password, 10);
@@ -49,8 +49,8 @@ export class AdminService {
 
   async remove(email: string) {
     const admin = await this.adminRepository.findOne({ where: { email } });
-    if (!admin) throw new NotFoundException('Admin no encontrado');
+    if (!admin) throw new NotFoundException('Administrador no encontrado');
     await this.adminRepository.remove(admin);
-    return { message: 'Admin eliminado correctamente' };
+    return { message: 'Administrador eliminado correctamente' };
   }
 }
