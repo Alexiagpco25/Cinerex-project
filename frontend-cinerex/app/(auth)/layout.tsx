@@ -14,7 +14,7 @@ export default function AuthLayout({
           className="mb-7"
           priority
         />
-        <div className="mt-0">{children}</div> // Sin margen extra arriba
+        <div className="mt-0">{children}</div> 
       </div>
     </div>
   );

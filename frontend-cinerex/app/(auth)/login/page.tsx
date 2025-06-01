@@ -6,26 +6,28 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
+    setSubmitting(true);
+
+    const formData = new FormData(e.currentTarget);
+    const authData: any = {};
+    authData.email = formData.get("userEmail");
+    authData.password = formData.get("userPassword");
 
     try {
       const res = await fetch("http://localhost:3000/auth/login", {
         method: "POST",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+        credentials: "include",
+        body: JSON.stringify(authData),
       });
 
       if (!res.ok) {
@@ -36,6 +38,8 @@ export default function LoginPage() {
       router.push("/admin");
     } catch (err: any) {
       setError(err.message);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -63,8 +67,6 @@ export default function LoginPage() {
           name="userEmail"
           type="email"
           required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
           className="w-full bg-gray-700 border border-gray-600 rounded-md placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
           placeholder="correo@ejemplo.com"
         />
@@ -82,8 +84,6 @@ export default function LoginPage() {
           name="userPassword"
           type="password"
           required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
           className="w-full bg-gray-700 border border-gray-600 rounded-md placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
           placeholder="********"
         />
@@ -97,9 +97,10 @@ export default function LoginPage() {
         color="primary"
         type="submit"
         size="md"
+        disabled={submitting}
         className="w-full bg-blue-400 hover:bg-gray-400 transition-colors font-semibold"
       >
-        Iniciar Sesión
+        {submitting ? "Enviando..." : "Iniciar Sesión"}
       </Button>
 
       <p className="mt-5 text-center text-gray-400 text-sm">

@@ -31,7 +31,6 @@ export default function ComprarBoletosPage() {
         if (funcionRes.ok) setFuncion(await funcionRes.json());
         if (peliculaRes.ok) setPelicula(await peliculaRes.json());
       } catch {
-        // ignoramos errores
       } finally {
         setLoading(false);
       }
@@ -89,13 +88,23 @@ export default function ComprarBoletosPage() {
           <h2 className="text-xl font-semibold">Comprar boletos</h2>
         </CardHeader>
         <CardBody>
-          <p><strong>Película:</strong> {pelicula.titulo}</p>
-          <p><strong>Fecha:</strong> {funcion.fecha}</p>
-          <p><strong>Hora:</strong> {funcion.hora}</p>
-          <p><strong>Boletos disponibles:</strong> {boletosDisponibles}</p>
+          <p>
+            <strong>Película:</strong> {pelicula.titulo}
+          </p>
+          <p>
+            <strong>Fecha:</strong> {funcion.fecha}
+          </p>
+          <p>
+            <strong>Hora:</strong> {funcion.hora}
+          </p>
+          <p>
+            <strong>Boletos disponibles:</strong> {boletosDisponibles}
+          </p>
 
           {boletosDisponibles === 0 ? (
-            <p className="text-red-600 font-semibold mt-4">No hay boletos disponibles.</p>
+            <p className="text-red-600 font-semibold mt-4">
+              No hay boletos disponibles.
+            </p>
           ) : (
             <form onSubmit={handleCompra} className="mt-4 space-y-4">
               <label className="block">
@@ -135,4 +144,3 @@ export default function ComprarBoletosPage() {
     </div>
   );
 }
-

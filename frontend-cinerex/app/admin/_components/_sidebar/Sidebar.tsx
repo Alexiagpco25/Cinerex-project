@@ -1,15 +1,29 @@
 "use client";
 
 import NavItem from "./NavItem";
-import { LuUsers, LuFilm, LuCalendarClock, LuLogOut, LuVideo } from "react-icons/lu";
+import {
+  LuUsers,
+  LuFilm,
+  LuCalendarClock,
+  LuLogOut,
+  LuVideo,
+} from "react-icons/lu";
 import { useRouter } from "next/navigation";
 
 export default function Sidebar() {
   const router = useRouter();
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    router.push("/login");
+  const handleLogout = async () => {
+    try {
+      await fetch("http://localhost:3000/auth/logout", {
+        method: "POST",
+        credentials: "include", 
+      });
+
+      router.push("/login");
+    } catch (error) {
+      console.error("Error al cerrar sesión", error);
+    }
   };
 
   return (

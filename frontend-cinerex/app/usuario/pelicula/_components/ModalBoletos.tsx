@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Button } from '@heroui/react';
-import { IoClose, IoCheckmarkCircleOutline } from 'react-icons/io5';
+import { useState, useEffect } from "react";
+import { Button } from "@heroui/react";
+import { IoClose, IoCheckmarkCircleOutline } from "react-icons/io5";
 
 interface Props {
   capacidadMaxima: number;
@@ -22,14 +22,14 @@ export default function ModalBoletos({
   onCompraExitosa,
 }: Props) {
   const [cantidad, setCantidad] = useState(1);
-  const [mensaje, setMensaje] = useState('');
+  const [mensaje, setMensaje] = useState("");
   const [loading, setLoading] = useState(false);
   const [exito, setExito] = useState(false);
 
   useEffect(() => {
     if (!abierto) {
       setCantidad(1);
-      setMensaje('');
+      setMensaje("");
       setLoading(false);
       setExito(false);
     }
@@ -42,7 +42,7 @@ export default function ModalBoletos({
     }
 
     setLoading(true);
-    setMensaje('');
+    setMensaje("");
 
     setTimeout(() => {
       setLoading(false);
@@ -81,7 +81,7 @@ export default function ModalBoletos({
             const val = Number(e.target.value);
             if (val >= 1 && val <= capacidadMaxima) {
               setCantidad(val);
-              setMensaje('');
+              setMensaje("");
             } else {
               setMensaje(`Debe ser entre 1 y ${capacidadMaxima}`);
             }
@@ -92,10 +92,14 @@ export default function ModalBoletos({
         {mensaje && (
           <p
             className={`mb-4 flex items-center gap-2 ${
-              exito ? 'text-green-600' : 'text-red-600'
+              exito ? "text-green-600" : "text-red-600"
             }`}
           >
-            {exito ? <IoCheckmarkCircleOutline size={20} /> : <IoClose size={20} />}
+            {exito ? (
+              <IoCheckmarkCircleOutline size={20} />
+            ) : (
+              <IoClose size={20} />
+            )}
             {mensaje}
           </p>
         )}
@@ -105,7 +109,7 @@ export default function ModalBoletos({
             Cancelar
           </Button>
           <Button onClick={comprar} disabled={loading}>
-            {loading ? 'Procesando...' : 'Confirmar compra'}
+            {loading ? "Procesando..." : "Confirmar compra"}
           </Button>
         </div>
       </div>

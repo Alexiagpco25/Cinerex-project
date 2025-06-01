@@ -5,26 +5,20 @@ import {
   Patch,
   Param,
   Res,
-  BadRequestException,
+  UseGuards,
+  Get,
+  Req,
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { LoginAdminDto } from "./dto/login-admin.dto";
 import { UpdateAdminDto } from "./dto/update-admin.dto";
-import { Response } from "express";
-import { AuthGuard } from "./guards/auth.guard";
-import { RolesGuard } from "./guards/roles.guard";
-import { Roles } from "./decorators/roles.decorator";
-import { UseGuards } from "@nestjs/common";
-
-const TOKEN_NAME = "auth_token";
+import { Response, Request } from "express";
 
 @Controller("auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post("register")
-  @UseGuards(AuthGuard, RolesGuard)
-  @Roles("admin")
   async register(@Body() loginDto: LoginAdminDto) {
     return this.authService.register(loginDto);
   }
@@ -32,21 +26,26 @@ export class AuthController {
   @Post("login")
   async login(
     @Body() loginDto: LoginAdminDto,
-    @Res({ passthrough: true }) response: Response
+    @Res({ passthrough: true }) res: Response
   ) {
-    const token = await this.authService.login(loginDto);
-    const expireDate = new Date();
-    expireDate.setDate(expireDate.getDate() + 7);
+    const { access_token, admin } = await this.authService.login(loginDto);
 
-    response.cookie(TOKEN_NAME, token.access_token, {
+    res.cookie("auth_token", access_token, {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      expires: expireDate,
-      maxAge: 1000 * 60 * 60 * 24 * 7,
+      sameSite: "lax",
+      secure: false,
+      path: "/",
     });
 
-    return { token: token.access_token, admin: token.admin };
+    return { message: "Login exitoso", admin };
+  }
+
+  @Post("logout")
+  async logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie("auth_token", {
+      path: "/",
+    });
+    return { message: "Sesión cerrada correctamente" };
   }
 
   @Patch(":email")
