@@ -2,7 +2,6 @@ import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/commo
 import { PeliculasService } from './peliculas.service';
 import { CreatePeliculaDto } from './dto/create-pelicula.dto';
 import { UpdatePeliculaDto } from './dto/update-pelicula.dto';
-import { Auth } from '../auth/decorators/auth.decorator';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Películas')
@@ -10,7 +9,6 @@ import { ApiTags } from '@nestjs/swagger';
 export class PeliculasController {
   constructor(private readonly peliculasService: PeliculasService) {}
 
-  @Auth('admin')
   @Post()
   create(@Body() dto: CreatePeliculaDto) {
     return this.peliculasService.create(dto);
@@ -26,13 +24,11 @@ export class PeliculasController {
     return this.peliculasService.findOne(id);
   }
 
-  @Auth('admin')
   @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdatePeliculaDto) {
     return this.peliculasService.update(id, dto);
   }
 
-  @Auth('admin')
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.peliculasService.remove(id);
